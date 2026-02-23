@@ -275,10 +275,10 @@
               onchange="filterClinics()"
             >
               <option value="">جميع المدن</option>
-              <option value="riyadh">الرياض</option>
-              <option value="jeddah">جدة</option>
-              <option value="dammam">الدمام</option>
-              <option value="makkah">مكة المكرمة</option>
+              <option value="riyadh">الخليل</option>
+              <option value="jeddah">بيت لحم </option>
+              <option value="dammam">رام الله</option>
+              <option value="makkah">نابلس </option>
             </select>
 
             <select
@@ -641,13 +641,13 @@
         grid.innerHTML = clinics
           .map((clinic) => {
             const cityName =
-              clinic.city === "riyadh"
-                ? "الرياض"
-                : clinic.city === "jeddah"
-                  ? "جدة"
-                  : clinic.city === "dammam"
-                    ? "الدمام"
-                    : "مكة المكرمة";
+              clinic.city === "hebron"
+                ? "الخليل"
+                : clinic.city === "ramallah"
+                  ? "رام الله"
+                  : clinic.city === "nablus"
+                    ? "نابلس"
+                    : "بيت لحم";
 
             return `
                     <div class="clinic-card">
@@ -744,8 +744,8 @@
         grid.innerHTML = filteredClinics
           .map((clinic) => {
             const cityName =
-              clinic.city === "riyadh"
-                ? "الرياض"
+              clinic.city === "hebron"
+                ? "الخليل"
                 : clinic.city === "jeddah"
                   ? "جدة"
                   : clinic.city === "dammam"
