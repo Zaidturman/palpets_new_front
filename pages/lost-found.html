@@ -1,0 +1,791 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>مفقود ومعثور - PalPets</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/style.css" />
+    <style>
+      .lost-badge {
+        background-color: #fee2e2;
+        color: #b91c1c;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+
+      .found-badge {
+        background-color: #d1fae5;
+        color: #065f46;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+
+      .urgent-badge {
+        background-color: #fef3c7;
+        color: #92400e;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.7;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      .report-section {
+        background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+        color: white;
+        padding: 3rem;
+        border-radius: 1rem;
+        margin: 2rem 0;
+      }
+
+      .tab-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        border-bottom: 2px solid #e5e7eb;
+        padding-bottom: 1rem;
+      }
+
+      .tab-button {
+        padding: 0.5rem 2rem;
+        border: none;
+        background: none;
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-light);
+        cursor: pointer;
+        position: relative;
+        transition: color 0.3s;
+      }
+
+      .tab-button.active {
+        color: var(--primary-color);
+      }
+
+      .tab-button.active::after {
+        content: "";
+        position: absolute;
+        bottom: -1rem;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background-color: var(--primary-color);
+      }
+
+      .map-placeholder {
+        background-color: #f3f4f6;
+        height: 300px;
+        border-radius: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 2rem 0;
+        background-image: url("https://images.unsplash.com/photo-1524661135-423995f22d0b");
+        background-size: cover;
+        background-position: center;
+        position: relative;
+      }
+
+      .map-placeholder::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 0.5rem;
+      }
+
+      .map-placeholder span {
+        position: relative;
+        z-index: 1;
+        color: white;
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+
+      .tips-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+      }
+
+      .tip-card {
+        background-color: white;
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        box-shadow: var(--shadow);
+      }
+
+      .tip-icon {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="container">
+        <a href="../index.html" class="logo">
+          <img src="../images/logo.png" alt="" />
+        </a>
+
+        <div class="nav-menu">
+          <a href="../index.html">الرئيسية</a>
+          <a href="pets.html">الحيوانات</a>
+          <a href="adoption.html">التبني</a>
+          <a href="lost-found.html" class="active">مفقود ومعثور</a>
+          <a href="veterinary.html">الرعاية البيطرية</a>
+          <a href="store.html">المتجر</a>
+        </div>
+
+        <div class="auth-buttons">
+          <a href="login.html" class="btn-login">تسجيل الدخول</a>
+        </div>
+
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+      </div>
+
+      <div class="mobile-menu" id="mobileMenu">
+        <a href="../index.html">الرئيسية</a>
+        <a href="pets.html">الحيوانات</a>
+        <a href="adoption.html">التبني</a>
+        <a href="lost-found.html">مفقود ومعثور</a>
+        <a href="veterinary.html">الرعاية البيطرية</a>
+        <a href="store.html">المتجر</a>
+        <a href="login.html">تسجيل الدخول</a>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section
+      class="hero"
+      style="background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%)"
+    >
+      <div class="container">
+        <div class="hero-content">
+          <h2>مفقود ومعثور</h2>
+          <p>ساعد في جمع شمل الحيوانات الأليفة مع أصحابها</p>
+          <div class="hero-buttons">
+            <a href="#report-lost" class="btn-primary"
+              >الإبلاغ عن حيوان مفقود</a
+            >
+            <a href="#report-found" class="btn-outline"
+              >الإبلاغ عن حيوان معثور عليه</a
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Stats -->
+    <section class="stats">
+      <div class="container">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-number">23</div>
+            <div class="stat-label">حيوان مفقود</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">15</div>
+            <div class="stat-label">حيوان معثور عليه</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">12</div>
+            <div class="stat-label">تم لم الشمل</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">8</div>
+            <div class="stat-label">بلاغات اليوم</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Report Buttons -->
+    <section
+      class="services"
+      style="background-color: white; padding-top: 2rem"
+    >
+      <div class="container">
+        <div
+          class="services-grid"
+          style="grid-template-columns: repeat(2, 1fr)"
+        >
+          <div class="service-card" style="border: 2px solid #fee2e2">
+            <div class="service-icon" style="color: #e11d48">🔍</div>
+            <h3>الإبلاغ عن حيوان مفقود</h3>
+            <p>إذا فقدت حيوانك الأليف، أبلغنا فوراً للمساعدة في العثور عليه</p>
+            <button
+              onclick="reportLost()"
+              class="btn-details"
+              style="background-color: #e11d48; margin-top: 1rem"
+            >
+              إبلاغ الآن
+            </button>
+          </div>
+          <div class="service-card" style="border: 2px solid #d1fae5">
+            <div class="service-icon" style="color: #065f46">📢</div>
+            <h3>الإبلاغ عن حيوان معثور عليه</h3>
+            <p>عثرت على حيوان أليف؟ ساعد في إعادته لأصحابه</p>
+            <button
+              onclick="reportFound()"
+              class="btn-details"
+              style="background-color: #065f46; margin-top: 1rem"
+            >
+              إبلاغ الآن
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tabs -->
+    <section class="services">
+      <div class="container">
+        <div class="tab-buttons">
+          <button
+            class="tab-button active"
+            onclick="switchTab('lost')"
+            id="tabLostBtn"
+          >
+            حيوانات مفقودة
+          </button>
+          <button
+            class="tab-button"
+            onclick="switchTab('found')"
+            id="tabFoundBtn"
+          >
+            حيوانات معثور عليها
+          </button>
+        </div>
+
+        <!-- Lost Pets Grid -->
+        <div id="lostPetsGrid" class="pets-grid"></div>
+
+        <!-- Found Pets Grid -->
+        <div id="foundPetsGrid" class="pets-grid" style="display: none"></div>
+      </div>
+    </section>
+
+    <!-- Map Section -->
+    <section class="services" style="background-color: white">
+      <div class="container">
+        <h2 class="section-title">آخر البلاغات على الخريطة</h2>
+        <div class="map-placeholder">
+          <span>🗺️ خريطة تفاعلية للبلاغات</span>
+        </div>
+        <p style="text-align: center; color: var(--text-light)">
+          سيتم إضافة خريطة تفاعلية قريباً
+        </p>
+      </div>
+    </section>
+
+    <!-- Tips Section -->
+    <section class="services">
+      <div class="container">
+        <h2 class="section-title">نصائح مهمة</h2>
+        <div class="tips-grid">
+          <div class="tip-card">
+            <div class="tip-icon">🏷️</div>
+            <h3>التعريف بالحيوان</h3>
+            <p>ضع طوقاً مع بطاقة تعريف تحتوي على رقم هاتفك</p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-icon">📸</div>
+            <h3>صور حديثة</h3>
+            <p>احتفظ دائماً بصور حديثة لحيوانك</p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-icon">💉</div>
+            <h3>الرقم الدقيق</h3>
+            <p>سجل حيوانك بالرقم الدقيق (Microchip)</p>
+          </div>
+          <div class="tip-card">
+            <div class="tip-icon">🌙</div>
+            <h3>البحث ليلاً</h3>
+            <p>الحيوانات المفقودة غالباً ما تظهر ليلاً عندما يهدأ الضجيج</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recent Success Stories -->
+    <section class="services" style="background-color: white">
+      <div class="container">
+        <h2 class="section-title">آخر قصص لم الشمل</h2>
+        <div class="services-grid" id="reunitedStories">
+          <div class="service-card">
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                margin-bottom: 1rem;
+              "
+            >
+              <img
+                src="https://images.unsplash.com/photo-1543466835-00a7907e9de1"
+                alt="Dog"
+                style="
+                  width: 60px;
+                  height: 60px;
+                  border-radius: 50%;
+                  object-fit: cover;
+                "
+              />
+              <div>
+                <h3 style="margin: 0">ماكس</h3>
+                <span style="color: var(--text-light); font-size: 0.875rem"
+                  >كلب جيرمن</span
+                >
+              </div>
+            </div>
+            <p>
+              "بعد 3 أيام من البحث، تم العثور على ماكس بفضل بلاغ على المنصة.
+              شكراً لكل من ساعد!"
+            </p>
+            <div
+              style="
+                margin-top: 1rem;
+                color: var(--secondary-color);
+                font-weight: 500;
+              "
+            >
+              تم لم الشمل: 15 فبراير 2026
+            </div>
+          </div>
+          <div class="service-card">
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                margin-bottom: 1rem;
+              "
+            >
+              <img
+                src="https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8"
+                alt="Cat"
+                style="
+                  width: 60px;
+                  height: 60px;
+                  border-radius: 50%;
+                  object-fit: cover;
+                "
+              />
+              <div>
+                <h3 style="margin: 0">لونا</h3>
+                <span style="color: var(--text-light); font-size: 0.875rem"
+                  >قطة شيرازي</span
+                >
+              </div>
+            </div>
+            <p>
+              "وجدت لونا بعد أسبوع كامل! عائلة وجدتها وأبلغت عبر المنصة. الحمد
+              لله على سلامتها"
+            </p>
+            <div
+              style="
+                margin-top: 1rem;
+                color: var(--secondary-color);
+                font-weight: 500;
+              "
+            >
+              تم لم الشمل: 10 فبراير 2026
+            </div>
+          </div>
+          <div class="service-card">
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                margin-bottom: 1rem;
+              "
+            >
+              <img
+                src="https://images.unsplash.com/photo-1558788353-f76d92427f16"
+                alt="Parrot"
+                style="
+                  width: 60px;
+                  height: 60px;
+                  border-radius: 50%;
+                  object-fit: cover;
+                "
+              />
+              <div>
+                <h3 style="margin: 0">كوكي</h3>
+                <span style="color: var(--text-light); font-size: 0.875rem"
+                  >ببغاء</span
+                >
+              </div>
+            </div>
+            <p>
+              "طار كوكي من النافذة، والحمد لله شخص طيب وجده وأخبرنا عبر المنصة.
+              نشكر الجميع"
+            </p>
+            <div
+              style="
+                margin-top: 1rem;
+                color: var(--secondary-color);
+                font-weight: 500;
+              "
+            >
+              تم لم الشمل: 5 فبراير 2026
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-section">
+            <h3>عن المنصة</h3>
+            <p>
+              منصة متكاملة للعناية بالحيوانات الأليفة، تجمع عشاق الحيوانات،
+              المربين، والملاجئ في مكان واحد.
+            </p>
+          </div>
+          <div class="footer-section">
+            <h3>روابط سريعة</h3>
+            <ul class="footer-links">
+              <li><a href="../index.html">الرئيسية</a></li>
+              <li><a href="pets.html">الحيوانات</a></li>
+              <li><a href="adoption.html">التبني</a></li>
+              <li><a href="lost-found.html">مفقود ومعثور</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h3>الخدمات</h3>
+            <ul class="footer-links">
+              <li><a href="veterinary.html">الرعاية البيطرية</a></li>
+              <li><a href="store.html">المتجر</a></li>
+              <li><a href="#">التطعيمات</a></li>
+              <li><a href="#">استشارات</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h3>تواصل معنا</h3>
+            <ul class="footer-links">
+              <li>📞 +972599248391</li>
+              <li>✉️ info@PalPets.com</li>
+              <li>📍 فلسطين</li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>© 2026 PalPets - جميع الحقوق محفوظة</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../js/main.js"></script>
+    <script>
+      // بيانات المفقود والمعثور
+      function getLostPets() {
+        return [
+          {
+            id: 201,
+            name: "شوقي",
+            type: "dog",
+            breed: "هاسكي",
+            age: "سنتين",
+            gender: "ذكر",
+            lostDate: "2026-02-14",
+            lostLocation: "حي النزهة، الرياض",
+            image:
+              "https://images.unsplash.com/photo-1605568427561-40dd23c2acea",
+            description: "كلب من نوع هاسكي، لونه رمادي وأبيض، لديه عيون زرقاء",
+            contact: "0501234567",
+            urgent: true,
+          },
+          {
+            id: 202,
+            name: "لولو",
+            type: "cat",
+            breed: "شيرازي",
+            age: "سنة ونص",
+            gender: "أنثى",
+            lostDate: "2026-02-13",
+            lostLocation: "حي الياسمين، نابلس",
+            image:
+              "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba",
+            description: "قطة بيضاء ذات عيون زرقاء، ترتدي طوقاً وردياً",
+            contact: "0559876543",
+            urgent: false,
+          },
+          {
+            id: 203,
+            name: "بودي",
+            type: "dog",
+            breed: "بوميرانيان",
+            age: "8 شهور",
+            gender: "ذكر",
+            lostDate: "2026-02-15",
+            lostLocation: "حي الروضة، نابلس",
+            image:
+              "https://images.unsplash.com/photo-1611003228941-98852ba62227",
+            description: "كلب صغير لونه بيج، لديه بقعة بيضاء على صدره",
+            contact: "0567891234",
+            urgent: true,
+          },
+        ];
+      }
+
+      function getFoundPets() {
+        return [
+          {
+            id: 301,
+            type: "dog",
+            breed: "جيرمن شيبرد",
+            age: "تقريباً 3 سنوات",
+            gender: "ذكر",
+            foundDate: "2026-02-15",
+            foundLocation: "جنين",
+            image:
+              "https://images.unsplash.com/photo-1589941013453-ec89f33b5e95",
+            description:
+              "كلب جيرمن، لونه أسود وبني، يلبس طوقاً أحمر، نظيف ويبدو أنه ضائع حديثاً",
+            contact: "0509876543",
+            temporary: "جمعية الرفق بالحيوان",
+          },
+          {
+            id: 302,
+            type: "cat",
+            breed: "قط بلدي",
+            age: "صغير",
+            gender: "أنثى",
+            foundDate: "2026-02-14",
+            foundLocation: "شارع السلام، الخليل",
+            image:
+              "https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8",
+            description:
+              "قطة صغيرة لونها رمادي، خجولة جداً، لا ترتدي أي طوق تعريف",
+            contact: "0551234567",
+            temporary: "عند المبلغ مؤقتاً",
+          },
+          {
+            id: 303,
+            type: "bird",
+            breed: "ببغاء",
+            age: "غير معروف",
+            gender: "غير معروف",
+            foundDate: "2026-02-13",
+            foundLocation: "رام الله",
+            image: "https://images.unsplash.com/photo-1552728089-57bdde30beb3",
+            description:
+              "ببغاء أخضر اللون، أليف ويأكل من اليد، يكرر بعض الكلمات",
+            contact: "0567890123",
+            temporary: "عند المبلغ مؤقتاً",
+          },
+        ];
+      }
+
+      // عرض الحيوانات المفقودة
+      function displayLostPets() {
+        const grid = document.getElementById("lostPetsGrid");
+        const pets = getLostPets();
+
+        grid.innerHTML = pets
+          .map((pet) => {
+            const typeName = pet.type === "dog" ? "كلب" : "قطة";
+            return `
+                    <div class="pet-card">
+                        <img src="${pet.image}" alt="${pet.name}" class="pet-image">
+                        <div class="pet-content">
+                            <div class="pet-header">
+                                <h3 class="pet-name">${pet.name}</h3>
+                                <div>
+                                    ${pet.urgent ? '<span class="urgent-badge">⚠️ عاجل</span>' : ""}
+                                    <span class="lost-badge">مفقود</span>
+                                </div>
+                            </div>
+                            <div class="pet-details">
+                                <p><strong>النوع:</strong> ${typeName}</p>
+                                <p><strong>السلالة:</strong> ${pet.breed}</p>
+                                <p><strong>تاريخ الفقدان:</strong> ${pet.lostDate}</p>
+                                <p><strong>مكان الفقدان:</strong> ${pet.lostLocation}</p>
+                            </div>
+                            <p class="pet-description">${pet.description}</p>
+                            <div class="pet-actions">
+                                <button onclick="reportSighting(${pet.id})" class="btn-details">الإبلاغ عن مشاهدة</button>
+                                <button onclick="contactOwner('${pet.contact}')" class="btn-contact">تواصل مع المالك</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+          })
+          .join("");
+      }
+
+      // عرض الحيوانات المعثور عليها
+      function displayFoundPets() {
+        const grid = document.getElementById("foundPetsGrid");
+        const pets = getFoundPets();
+
+        grid.innerHTML = pets
+          .map((pet, index) => {
+            const typeName =
+              pet.type === "dog" ? "كلب" : pet.type === "cat" ? "قطة" : "طائر";
+            return `
+                    <div class="pet-card">
+                        <img src="${pet.image}" alt="Found pet" class="pet-image">
+                        <div class="pet-content">
+                            <div class="pet-header">
+                                <h3 class="pet-name">حيوان معثور عليه</h3>
+                                <span class="found-badge">معثور عليه</span>
+                            </div>
+                            <div class="pet-details">
+                                <p><strong>النوع:</strong> ${typeName}</p>
+                                <p><strong>السلالة:</strong> ${pet.breed}</p>
+                                <p><strong>تاريخ العثور:</strong> ${pet.foundDate}</p>
+                                <p><strong>مكان العثور:</strong> ${pet.foundLocation}</p>
+                                <p><strong>المكان الحالي:</strong> ${pet.temporary}</p>
+                            </div>
+                            <p class="pet-description">${pet.description}</p>
+                            <div class="pet-actions">
+                                <button onclick="claimPet(${index})" class="btn-details">الإبلاغ كحيوانك</button>
+                                <button onclick="contactFinder('${pet.contact}')" class="btn-contact">تواصل مع العاثر</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+          })
+          .join("");
+      }
+
+      // تبديل التبويبات
+      function switchTab(tab) {
+        const lostBtn = document.getElementById("tabLostBtn");
+        const foundBtn = document.getElementById("tabFoundBtn");
+        const lostGrid = document.getElementById("lostPetsGrid");
+        const foundGrid = document.getElementById("foundPetsGrid");
+
+        if (tab === "lost") {
+          lostBtn.classList.add("active");
+          foundBtn.classList.remove("active");
+          lostGrid.style.display = "grid";
+          foundGrid.style.display = "none";
+        } else {
+          foundBtn.classList.add("active");
+          lostBtn.classList.remove("active");
+          foundGrid.style.display = "grid";
+          lostGrid.style.display = "none";
+        }
+      }
+
+      // الإبلاغ عن مشاهدة
+      function reportSighting(petId) {
+        const isLoggedIn = localStorage.getItem("token");
+        if (isLoggedIn) {
+          alert("شكراً للإبلاغ. سيتم إشعار المالك");
+        } else {
+          if (
+            confirm(
+              "يجب تسجيل الدخول أولاً. هل تريد الانتقال إلى صفحة تسجيل الدخول؟",
+            )
+          ) {
+            window.location.href = "login.html";
+          }
+        }
+      }
+
+      // التواصل مع المالك
+      function contactOwner(phone) {
+        alert(`يمكنك التواصل مع المالك على الرقم: ${phone}`);
+      }
+
+      // التواصل مع العاثر
+      function contactFinder(phone) {
+        alert(
+          `يمكنك التواصل مع الشخص الذي عثر على الحيوان على الرقم: ${phone}`,
+        );
+      }
+
+      // الإبلاغ كحيوانك
+      function claimPet(index) {
+        const isLoggedIn = localStorage.getItem("token");
+        if (isLoggedIn) {
+          alert(
+            "سيتم التحقق من المعلومات. يرجى تجهيز صور أو وثائق تثبت ملكيتك للحيوان",
+          );
+        } else {
+          if (
+            confirm(
+              "يجب تسجيل الدخول أولاً. هل تريد الانتقال إلى صفحة تسجيل الدخول؟",
+            )
+          ) {
+            window.location.href = "login.html";
+          }
+        }
+      }
+
+      // الإبلاغ عن حيوان مفقود
+      function reportLost() {
+        const isLoggedIn = localStorage.getItem("token");
+        if (isLoggedIn) {
+          alert("سيتم فتح نموذج الإبلاغ عن حيوان مفقود");
+        } else {
+          if (
+            confirm(
+              "يجب تسجيل الدخول أولاً. هل تريد الانتقال إلى صفحة تسجيل الدخول؟",
+            )
+          ) {
+            window.location.href = "login.html";
+          }
+        }
+      }
+
+      // الإبلاغ عن حيوان معثور عليه
+      function reportFound() {
+        const isLoggedIn = localStorage.getItem("token");
+        if (isLoggedIn) {
+          alert("سيتم فتح نموذج الإبلاغ عن حيوان معثور عليه");
+        } else {
+          if (
+            confirm(
+              "يجب تسجيل الدخول أولاً. هل تريد الانتقال إلى صفحة تسجيل الدخول؟",
+            )
+          ) {
+            window.location.href = "login.html";
+          }
+        }
+      }
+
+      // تهيئة الصفحة
+      document.addEventListener("DOMContentLoaded", function () {
+        displayLostPets();
+        displayFoundPets();
+      });
+    </script>
+  </body>
+</html>
